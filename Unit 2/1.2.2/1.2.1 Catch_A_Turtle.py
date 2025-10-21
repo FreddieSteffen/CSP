@@ -8,7 +8,7 @@ turtle_shape = ["diamond"]
 turtle_colors = ["red", "blue", "green", "yellow", "black", "purple", "cyan", "pink", "orange", "grey", "light sky blue"]
 
 font_setup = ("Arial", 20, "normal")
-timer = 5
+timer = 3
 counter_interval = 1000   #1000 represents 1 second
 timer_up = False
 
@@ -21,6 +21,13 @@ yHigh = 200
 leaderboard_file_name = "a112_leaderboard.txt"
 leader_names_list = []
 leader_scores_list = []
+player_name = trtl.textinput("Name", "Enter your name")
+
+while "," in player_name or len(player_name)==0:
+  player_name = trtl.textinput("Name", "Please do not use a comma, Enter your name")
+
+print(leader_names_list)
+print(leader_scores_list)
 
 global score
 score = 0
@@ -40,6 +47,7 @@ def countdown():
     counter.write("Time's Up", font=font_setup)
     timer_up = True
     t.hideturtle()
+    manage_leaderboard()
   else:
     counter.write("Timer: " + str(timer), font=font_setup)
     timer = timer - 1
@@ -90,6 +98,21 @@ def new_colors():
   t.stamp()
   turtle_colors.pop(0)
   t.color(turtle_colors[0])
+
+def manage_leaderboard():
+  global score
+  global t
+
+  #Get the names and scores from the leaderboard file
+  leader_names_list = lb.get_names(leaderboard_file_name)
+  leader_scores_list = lb.get_scores(leaderboard_file_name)
+
+  #Show the leaderboard with or without the current player
+  if (len(leader_scores_list) < 5 or score >= leader_scores_list[4]):
+    lb.update_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list, player_name, score)
+    lb.draw_leaderboard(True, leader_names_list, leader_scores_list, t, score)
+  else:
+    lb.draw_leaderboard(False, leader_names_list, leader_scores_list, t, score)
 
 #Events
 wn = trtl.Screen()

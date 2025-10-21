@@ -1,0 +1,5 @@
+Hacker,100
+Gold,25
+Silver,20
+Bronze,15
+Fred,3
