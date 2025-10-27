@@ -18,7 +18,7 @@ yLow = -200
 yHigh = 200
 
 #Game configuration
-leaderboard_file_name = "a122_leaderboard.txt"
+leaderboard_file_name = "122_leaderboard.txt"
 leader_names_list = []
 leader_scores_list = []
 max_chars = 7

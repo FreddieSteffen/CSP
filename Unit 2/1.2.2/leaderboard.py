@@ -130,5 +130,5 @@ def draw_leaderboard(high_scorer, leader_names, leader_scores, turtle_object, pl
   elif player_score >= bronze_score and player_score < silver_score and player_score < gold_score:
     turtle_object.write("You earned a bronze medal!", font=font_setup)
 
-get_names("a122_leaderboard.txt")
-get_scores("a122_leaderboard.txt")
+get_names("122_leaderboard.txt")
+get_scores("122_leaderboard.txt")
