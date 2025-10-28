@@ -2,24 +2,26 @@
 #Blackjack/Slots Game
 import turtle as trtl
 import random as rand
-import leaderboard as lb
+'''import leaderboard as lb'''
 import tkinter as tk
 
 t = trtl.Turtle() #Named this to save some time
 
 #Lists
-SuitsList = ["Heart", "Diamond", "Spades", "Clubs"]
+SuitsList = ["Hearts", "Diamonds", "Spades", "Clubs"]
 NumList = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 
 TempNumList = NumList
 TempSuitsList = SuitsList
 
 #Variables
-CardValue = 0
-CardName =""
+CardValue = rand.choice(NumList)
+CardSuit = rand.choice(SuitsList)
+CardName = ""
 
-PlayerTotalValue = 0
-HouseTotalValue = 0
+PlayerScore = 0
+DealerScore = 0
+penpos = -130
 
 max_chars = 8
 font_setup = ("Arial", 20, "normal")
@@ -27,6 +29,8 @@ font_setup = ("Arial", 20, "normal")
 #Functions
 def FaceCardValue():
   global CardValue
+  global CardSuit
+  global CardName
   if CardValue == 13:
     CardValue = 10
     CardName = "King"
@@ -39,54 +43,102 @@ def FaceCardValue():
   if CardValue == 1:
     CardValue = 11
     CardName = "Ace"
-  if CardValue == 2:
-    CardValue = 2
-    CardName = str(CardValue)
-  if CardValue == 3:
-    CardValue = 3
-    CardName = str(CardValue)
-  if CardValue == 4:
-    CardValue = 4
-    CardName = str(CardValue)
-  if CardValue == 5:
-    CardValue = 5
-    CardName = str(CardValue)
-  if CardValue == 6:
-    CardValue = 6
-    CardName = str(CardValue)
-  if CardValue == 7:
-    CardValue = 7
-    CardName = str(CardValue)
-  if CardValue == 8:
-    CardValue = 8
-    CardName = str(CardValue)
-  if CardValue == 9:
-    CardValue = 9
-    CardName = str(CardValue)
-  if CardValue == 10:
-    CardValue = 10
-    CardName = str(CardValue)
+  else:
+     CardName = str(CardValue)
+  print(CardName, "of", CardSuit)
 
 def writerMove():
+  t.speed(0)
   t.hideturtle()
   t.penup()
   t.setheading(90)
   t.back(20)
   t.pendown()
 
+def ChipsTotal():
+   chipsT = trtl.Turtle()
+   chipsT.hideturtle()
+   chipsT.penup()
+   chipsT.speed(0)
+   chipsT.goto(0,160)
+   chipsT.write("Chips:", Chips, font=("Arial", 14, "bold"))
+
 def PlayGame():
-  BetValue()
+  '''BetValue()'''
   CardValue = rand.randint(1,13)
   FaceCardValue()
+  MainGameCreate()
 
 def BetValue():
   global bet
   global Chips
   bet = trtl.textinput("Bet", "How much do you want to bet")
-  if int(bet) <= Chips:
-    PlayGame()
-  while str(bet) or int(bet) > Chips:
+  if bet.isnumeric():
+    if int(bet) <= Chips:
+      PlayGame()
+  else:
     bet = trtl.textinput("Bet", "Please enter only numbers")
+
+def ReplayGame():
+  pen.clear()
+  t.clear()
+  pen.fillcolor("grey")
+  pen.penup()
+  pen.goto(-200,200)
+  pen.pendown()
+  pen.begin_fill()
+  for i in range(2):
+    pen.forward(80)
+    pen.left(90)
+    pen.forward(40)
+    pen.left(90)
+  pen.end_fill()
+  pen.write("Continue", align="center", font=("Arial", 14, "bold"))
+
+  pen.begin_fill()
+  pen.penup()
+  pen.goto(200,200)
+  pen.pendown()
+  for i in range(2):
+    pen.forward(80)
+    pen.left(90)
+    pen.forward(40)
+    pen.left(90)
+  pen.end_fill()
+  pen.write("Cash Out", align="center", font=("Arial", 14, "bold"))
+
+def MainGameCreate():
+   global PlayerScore
+   global DealerScore
+   t.penup()
+   t.goto(-200,200)
+   t.write("Dealer", font=("Arial", 14, "bold"))
+
+   t.goto(160,200)
+   t.write(str(player_name), font=("Arial", 14, "bold"))
+
+   t.goto(-200,-160)
+   t.write("Dealer Score:", DealerScore, font=("Arial", 14, "bold"))
+
+   t.goto(160,-160)
+   t.write(f"{player_name} Score: {PlayerScore}", font=("Arial", 14, "bold"))
+
+   for i in range(3): #TRYING TO MAKE THIS WORK
+    global penpos
+    pen.fillcolor("grey")
+    pen.penup()
+    pen.goto(-130,-200)
+    pen.pendown()
+    pen.begin_fill()
+    for i in range(2):
+      pen.forward(80)
+      pen.left(90)
+      pen.forward(40)
+      pen.left(90)
+    pen.end_fill()
+    pen.write("Continue", align="center", font=("Arial", 14, "bold"))
+    penpos = penpos - 80
+
 
 #Game Portion
 
@@ -100,19 +152,18 @@ while "," in player_name or len(player_name)==0 or "1" in player_name or "2" in 
 
 #Ask if they want rules
 screen = trtl.Screen()
-screen.title("Turtle Buttons Example")
 
-# --- Create a turtle for text and buttons ---
+#Create a turtle for text and buttons
 pen = trtl.Turtle()
 pen.hideturtle()
 pen.penup()
 pen.speed(0)
 
-# --- Draw Yes button ---
+#Draw Yes button
 pen.goto(-100, -100)
-pen.fillcolor("lightgreen")
+pen.fillcolor("green")
 pen.begin_fill()
-for _ in range(2):
+for i in range(2):
     pen.forward(80)
     pen.left(90)
     pen.forward(40)
@@ -121,9 +172,9 @@ pen.end_fill()
 pen.goto(-60, -90)
 pen.write("YES", align="center", font=("Arial", 14, "bold"))
 
-# --- Draw No button ---
+#Draw No button
 pen.goto(100, -100)
-pen.fillcolor("lightcoral")
+pen.fillcolor("red")
 pen.begin_fill()
 for i in range(2):
     pen.forward(80)
@@ -134,11 +185,11 @@ pen.end_fill()
 pen.goto(140, -90)
 pen.write("NO", align="center", font=("Arial", 14, "bold"))
 
-# --- Display question ---
+#Display question
 pen.goto(0, 200)
 pen.write("Do you want to know the rules?", align="center", font=("Arial", 18, "bold"))
 
-# --- Function to check button clicks ---
+#Function to check button clicks
 def on_click(x, y):
     global pen
     # YES button area
@@ -167,17 +218,31 @@ def on_click(x, y):
     # NO button area
     elif 100 < x < 180 and -100 < y < -60:
         pen.clear()
+        BetValue()
         PlayGame()
 
-# --- Listen for clicks ---
+    #Continue
+    elif -200 < x < -120 and 200 < y < 240:
+       pen.clear()
+       print("continuing")
+
+    #Cashout
+    elif 120 < x < 200 and 200 < y < 240:
+       pen.clear()
+       print("Cashing out")
+
+#Listen for clicks
 screen.onclick(on_click)
 
 #Begin Playing
 #Chips total = 100
+global Chips
 Chips = 100
+ChipsTotal()
+BetValue()
+ReplayGame()
 
 #Bet amount question
-'''PlayGame()'''
 
 #Play game
 #Hit
