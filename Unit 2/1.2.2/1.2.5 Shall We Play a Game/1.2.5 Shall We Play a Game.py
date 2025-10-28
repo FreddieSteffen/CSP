@@ -85,12 +85,8 @@ def BetValue():
   bet = trtl.textinput("Bet", "How much do you want to bet")
   if int(bet) <= Chips:
     PlayGame()
-  if str(bet):
+  while str(bet) or int(bet) > Chips:
     bet = trtl.textinput("Bet", "Please enter only numbers")
-    if int(bet) > Chips:
-      bet = trtl.textinput("Bet", "Please enter valid bet")
-  if int(bet) > Chips:
-      bet = trtl.textinput("Bet", "Please enter valid bet")
 
 #Game Portion
 
