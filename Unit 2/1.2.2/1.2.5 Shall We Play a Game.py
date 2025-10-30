@@ -7,9 +7,40 @@ import tkinter as tk
 
 t = trtl.Turtle() #Named this to save some time
 
+from PIL import Image
+
+def resize_card(name, size):
+    img = Image.open(f"{name}.gif")
+    img = img.resize(size)
+    img.save(f"{name}_small.gif")
+
+for suit in ["hearts", "diamonds", "clubs", "spades"]:
+    resize_card(suit, (50, 50))
+
+wn = trtl.Screen()
+hearts = "hearts_small.gif"
+diamonds = "diamonds_small.gif"
+clubs = "clubs_small.gif"
+spades = "spades_small.gif"
+wn.addshape(hearts)
+wn.addshape(diamonds)
+wn.addshape(clubs)
+wn.addshape(spades)
+hearts = trtl.Turtle(shape=hearts)
+hearts.hideturtle()
+diamonds = trtl.Turtle(shape=diamonds)
+diamonds.hideturtle()
+clubs = trtl.Turtle(shape=clubs)
+clubs.hideturtle()
+spades = trtl.Turtle(shape=spades)
+spades.hideturtle()
+
 #Lists
 SuitsList = ["Hearts", "Diamonds", "Spades", "Clubs"]
 NumList = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+
+CardX = [30,120,0,0,0,0]
+CardY = [150,50,0,0,0]
 
 PlayerOptions = ["Hit", "Stand", "bet"]
 
@@ -90,19 +121,20 @@ def MainGameCreate():
    pen.end_fill()
    pen.write("Stand", align="center", font=("Arial", 14, "bold"))
 
-def Cashout(): #NOT WORKING YET
+def Cashout():
    global Chips
-   chipsT = trtl.Turtle()
-   chipsT.hideturtle()
-   chipsT.penup()
-   chipsT.speed(0)
-   chipsT.goto(0,160)
-   chipsT.write("You got", Chips, "Chips.")
+   ChipsT = trtl.Turtle()
+   ChipsT.hideturtle()
+   ChipsT.penup()
+   ChipsT.speed(0)
+   ChipsT.goto(0,160)
+   ChipsT.write(f"You got {Chips} Chips.", font=("Arial", 14, "bold"))
 
 #Actual Blackjack game
 def Blackjack():
   global CardValue
   global TempPlayerValue
+  global PlayerScore
   global CardSuit
   global CardName
   global Chips
@@ -127,12 +159,18 @@ def Blackjack():
       pen.write("You lost", align="center", font=("Arial", 20, "bold"))
       ReplayGame()
 
+def StartingCards():
+  for i in range(2):
+    Blackjack()
+    DrawCards()
+
 def Dealer():
   global CardValue
   global TempDealerValue
   global DealerScore
   global CardSuit
   global Chips
+  global bet
 
   while DealerScore < 17:
     CardValue = rand.choice(NumList)
@@ -142,7 +180,6 @@ def Dealer():
     DealerScore = DealerScore + TempDealerValue
     pen.clear()
     t.clear()
-    wn.update()
 
   if DealerScore < PlayerScore and DealerScore <= 21 and PlayerScore <= 21:
     Chips = Chips + int(bet)
@@ -160,6 +197,121 @@ def writerMove():
   t.setheading(90)
   t.back(20)
   t.pendown()
+
+def ReplayGame():
+  global PlayerScore
+  global DealerScore
+
+  pen.clear()
+  t.clear()
+  pen.fillcolor("grey")
+  pen.penup()
+  pen.goto(-200,200)
+  pen.pendown()
+  pen.begin_fill()
+  for i in range(2):
+    pen.forward(80)
+    pen.left(90)
+    pen.forward(40)
+    pen.left(90)
+  pen.end_fill()
+  pen.write("Continue", align="center", font=("Arial", 14, "bold"))
+
+  pen.begin_fill()
+  pen.penup()
+  pen.goto(200,200)
+  pen.pendown()
+  for i in range(2):
+    pen.forward(80)
+    pen.left(90)
+    pen.forward(40)
+    pen.left(90)
+  pen.end_fill()
+  pen.write("Cash Out", align="center", font=("Arial", 14, "bold"))
+  PlayerScore = 0
+  DealerScore = 0
+
+def DrawCards():
+  global x
+  global y
+  x = CardX[0]
+  y = CardY[0]
+  t.penup()
+  t.hideturtle()
+  t.goto(0,200)
+  t.pendown()
+  t.goto(150,200)
+  t.goto(150,0)
+  t.goto(0,0)
+  t.goto(0,200)
+
+  t.penup()
+  t.hideturtle()
+  t.goto(x+75,y)
+  t.write(CardName, font=("Arial", 20, "bold"))
+  t.goto(x,y-100)
+  t.write(CardName, font=("Arial", 20, "bold"))
+
+  if CardSuit == "Hearts":
+    hearts.hideturtle()
+    hearts.penup()
+    for i in range(2):
+      hearts.goto(x,y)
+      hearts.stamp()
+      CardX.pop(0)
+      CardY.pop(0)
+      x = CardX[0]
+      y = CardY[0]
+    CardX.append(30)
+    CardX.append(120)
+    CardY.append(150)
+    CardY.append(50)
+
+  if CardSuit == "Diamonds":
+    diamonds.hideturtle()
+    diamonds.penup()
+    for i in range(2):
+      diamonds.goto(x,y)
+      diamonds.stamp()
+      CardX.pop(0)
+      CardY.pop(0)
+      x = CardX[0]
+      y = CardY[0]
+    CardX.append(30)
+    CardX.append(120)
+    CardY.append(150)
+    CardY.append(50)
+
+  if CardSuit == "Spades":
+    spades.hideturtle()
+    spades.penup()
+    for i in range(2):
+      spades.goto(x,y)
+      spades.stamp()
+      CardX.pop(0)
+      CardY.pop(0)
+      x = CardX[0]
+      y = CardY[0]
+    CardX.append(30)
+    CardX.append(120)
+    CardY.append(150)
+    CardY.append(50)
+
+  if CardSuit == "Clubs":
+    clubs.hideturtle()
+    clubs.penup()
+    for i in range(2):
+      clubs.goto(x,y)
+      clubs.stamp()
+      CardX.pop(0)
+      CardY.pop(0)
+      x = CardX[0]
+      y = CardY[0]
+    CardX.append(30)
+    CardX.append(120)
+    CardY.append(150)
+    CardY.append(50)
+    
 
 #Game Portion
 
@@ -274,7 +426,6 @@ def on_click(x, y):
 screen.onclick(on_click)
 
 #Begin Playing
-Blackjack()
 #Bet amount question
 def BetValue():
   global bet
@@ -289,44 +440,14 @@ def BetValue():
     bet = trtl.textinput("Bet", "Please enter only valid numbers")
 
 #Play game
+BetValue()
+StartingCards()
 
 #Hit
 
 #Stand
 
 #Win/Lose Screen
-def ReplayGame():
-  global PlayerScore
-  global DealerScore
-
-  pen.clear()
-  t.clear()
-  pen.fillcolor("grey")
-  pen.penup()
-  pen.goto(-200,200)
-  pen.pendown()
-  pen.begin_fill()
-  for i in range(2):
-    pen.forward(80)
-    pen.left(90)
-    pen.forward(40)
-    pen.left(90)
-  pen.end_fill()
-  pen.write("Continue", align="center", font=("Arial", 14, "bold"))
-
-  pen.begin_fill()
-  pen.penup()
-  pen.goto(200,200)
-  pen.pendown()
-  for i in range(2):
-    pen.forward(80)
-    pen.left(90)
-    pen.forward(40)
-    pen.left(90)
-  pen.end_fill()
-  pen.write("Cash Out", align="center", font=("Arial", 14, "bold"))
-  PlayerScore = 0
-  DealerScore = 0
 
 #Keeping whats on the screen there
 wn = trtl.Screen()
